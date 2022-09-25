@@ -9,8 +9,8 @@ from sklearn import datasets, svm, metrics
 from sklearn.model_selection import train_test_split
 
 # 1. set the ranges of hyper parameters
-gamma_list = [0.012, 0.061,0.012]
-c_list = [0.11, 0.23, 0.526]
+gamma_list = [0.012, 0.061,0.012,0.11,0.15,0.18,0.32,0.87,0.9,1]
+c_list = [0.11, 0.23, 0.526,0.18,0.20,0.25,0.78,0.49,0.36,0.0012]
 
 h_param_comb = [{'gamma':g, 'C':c} for g in gamma_list for c in c_list]
 
