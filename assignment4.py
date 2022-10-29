@@ -97,6 +97,9 @@ for i in range(0,5):
 #print(svm_accuracy)
 
 
+best_acc = -1.0
+best_model = None
+best_h_params = None
 
 
 
@@ -106,7 +109,7 @@ min_samples_split = [2,4,6]
 
 h_param_comb = [{'max_depth':g, 'min_samples_split':c} for g in max_depth for c in min_samples_split]
 
-assert len(h_param_comb) == len(gamma_list)*len(c_list)
+assert len(h_param_comb) == len(max_depth)*len(min_samples_split)
 
 dt_accuracy = []
 
@@ -150,9 +153,34 @@ for i in range(0,5):
             #print("Found new best acc with :"+str(cur_h_params))
             #print("New best val accuracy:" + str(cur_acc)
     dt_accuracy.append(cur_acc)
-#print(dt_accuracy)
 
 
+clf = DecisionTreeClassifier()
+#print(best_h_params)
+        #PART: setting up hyperparameter
+X_train, X_dev_test, y_train, y_dev_test = train_test_split(
+data, digits.target, test_size=dev_test_frac, shuffle=True
+)
+X_test, X_dev, y_test, y_dev = train_test_split(
+X_dev_test, y_dev_test, test_size=(dev_frac)/dev_test_frac, shuffle=True
+)
+hyper_params = best_h_params
+clf.set_params(**best_h_params)
+clf.fit(X_train,y_train)
+ypred = clf.predict(X_test)
+report = pd.DataFrame()
+report['Actual'] = y_test
+report['Predicted'] = ypred
+report['Error'] = abs(y_test-ypred)
+
+def num(num):
+    if(num>0):
+        return 1
+    else:
+        return 0
+report['Error'] = report['Error'].apply(num)
+
+print(report)
 sreport = pd.DataFrame()
 sreport['Accuracy of SVM'] = svm_accuracy
 print(sreport)
